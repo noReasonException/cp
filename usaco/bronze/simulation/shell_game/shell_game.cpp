@@ -84,12 +84,7 @@ void solve2(){
 		a--;b--;g--; //zero indexing
 		std::swap(games[a],games[b]); //swap pebble = swap game (see proof)
 		for (int i = 0; i < 3; i++) //for each possible game
-		{
-			if(games[i]==g){
-				scores[i]+=1;
-			}
-		}
-		// scores[games[g]]+=1;
+		scores[games[g]]+=1;
 		
 		
 	}
