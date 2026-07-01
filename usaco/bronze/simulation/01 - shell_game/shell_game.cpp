@@ -50,6 +50,10 @@ template <typename container> void debug(container& genericSequence,string id="N
 void solve(){
 	int n,a,b,g,swap;
 	cin>>n;
+	if(n==1){
+		cout<<"1\n";
+		return;
+	}
 	int game1[3] = {1,0,0};
 	int game2[3] = {0,1,0};
 	int game3[3] = {0,0,1};
@@ -58,48 +62,29 @@ void solve(){
 	for (size_t i = 0; i < n; i++)
 	{
 		cin>>a>>b;
+		a--;b--;
 		for (size_t i = 0; i < 3; i++)
 		{
+			if(games[i][a]+games[i][b]==0) continue;
 			swap = games[i][a];
 			games[i][a] = games[i][b];
 			games[i][b]=swap;
 		}
 		cin>>g;
+		g--;
 		if(games[0][g]) scores[0]+=1;
 		if(games[1][g]) scores[1]+=1;
 		if(games[2][g]) scores[2]+=1;
 	}	
 	cout<<max(scores[0],max(scores[1],scores[2]))<<"\n";
 }
-void solve2(){
-	int n,a,b,g;
-	cin>>n;
-	//without multiple arrays for each game
-	//single variable declaring where the ball is per game
-	int games[3]={0,1,2}; //in game i pebble is in position games[i]
-	int scores[3]={0,0,0}; //score per possible game
-	for (int i = 0; i < n; i++)
-	{
-		cin>>a>>b>>g;
-		a--;b--;g--; //zero indexing
-		std::swap(games[a],games[b]); //swap pebble = swap game (see proof)
-		for (int i = 0; i < 3; i++) //for each possible game
-		scores[games[g]]+=1;
-		
-		
-	}
-	cout<<scores[0]<<"-"<<scores[1]<<"-"<<scores[2]<<"\n";
-	cout<<max(scores[0],max(scores[1],scores[2]))<<"\n";
-	
-	
-}
 
 
 int main(){
 	ios::sync_with_stdio(false);
 	cin.tie(0);
-	//freopen("input.txt", "r", stdin);
-	//freopen("output.txt", "w", stdout);
-	solve2();
+	freopen("shell.in", "r", stdin);
+	freopen("shell.out", "w", stdout);
+	solve();
 	return 0;
 }
