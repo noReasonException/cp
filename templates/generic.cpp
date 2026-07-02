@@ -54,8 +54,8 @@ void solve(){
 int main(){
 	ios::sync_with_stdio(false);
 	cin.tie(0);
-	//freopen("input.txt", "r", stdin);
-	//freopen("output.txt", "w", stdout);
+	//freopen("input.in", "r", stdin);
+	//freopen("output.in", "w", stdout);
 
 	
 
