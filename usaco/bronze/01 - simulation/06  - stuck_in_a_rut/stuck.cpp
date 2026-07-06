@@ -57,51 +57,69 @@ void solve(){
 	int n,x,y;
 	string o;
 	vector<array<int,5>> map;
-	std::map<pair<int,int>,int> rutted_blocks;
+	std::set<pair<int,int>> rutted_blocks;
 	cin>>n;
 	for (size_t i = 0; i < n; i++)
 	{
 		cin>>o>>x>>y;
 		//N,E | x | y | locked or not locked | GRASS EATEN
-		map.push_back({o[0],x,y,false,0});
+		map.push_back({o[0],x,y,false,1});
 	}
-	
-	for (size_t i = 0; i < n; i++)
-	{
-		cout<<(char)map[i][0]<<"\t"<<map[i][1]<<"\t"<<map[i][2]<<"\n";
-	}
+	// for (size_t i = 0; i < n; i++)
+	// {
+	// 	cout<<(char)map[i][0]<<"\t"<<map[i][1]<<"\t"<<map[i][2]<<"\n";
+	// }
 	int hours=0;
 	int locked_cows=0;
-	
-	while(locked_cows<n && hours<500){
+	bool terminate=false;
+	while(hours<200000){
+		if(locked_cows==n){
+			break;
+		}
 		locked_cows=0;
 		hours+=1;
-		//for to update positions
+		// cout<<"Hours :"<<hours<<" Terminate "<<terminate<<"\n";
+		//detect-collisions
 		for (size_t i = 0; i < n; i++)
 		{
 			if(map[i][IS_LOCKED]){
-				locked_cows++;
+				locked_cows+=1;
 				continue;
-			}//not blocked
+			}
+			// cout<<"Cow "<<i<<" status is ";
+			if(
+				(rutted_blocks.find({map[i][POS_X]+1,map[i][POS_Y]})!=rutted_blocks.end() && 
+				map[i][ORIENTATION]=='E') || 
+				(rutted_blocks.find({map[i][POS_X],map[i][POS_Y]+1})!=rutted_blocks.end() && 
+				map[i][ORIENTATION]=='N')){
+					map[i][IS_LOCKED]=true;
+					// cout<<"IS LOCKED cause "<<map[i][POS_X]<<"-"<<map[i][POS_Y]<<" exists\n";
+			}
+			else{
+				map[i][GRASS_EATEN]+=1;
+				// cout<<"EAT GRASS cause "<<map[i][POS_X]<<"-"<<map[i][POS_Y]<<" does not exist\n";
+			}
+			
+		}
+		//for to update positions
+		for (size_t i = 0; i < n ; i++)
+		{
+			if(map[i][IS_LOCKED])continue;
+
 			if(map[i][ORIENTATION]=='E'){ //goes east
 				map[i][POS_X]+=1;
 			}
 			else{ //goes north
 				map[i][POS_Y]+=1;
 			}
-			rutted_blocks.insert({std::make_pair(map[i][POS_X],map[i][POS_Y]),1});
-
+			rutted_blocks.insert({map[i][POS_X],map[i][POS_Y]});
 		}
-		for (size_t i = 0; i < n; i++)
-		{
-			if(rutted_blocks.find(std::make_pair(map[i][POS_X],map[i][POS_Y]))==rutted_blocks.end()){
-				map[i][IS_LOCKED]=true;
-			}
-			else{
-				map[i][GRASS_EATEN]+=1;
-			}
-			
-		}
+		
+		//for debug
+		// for (size_t i = 0; i < n; i++)
+		// {	
+		// 	cout<<"\t\t Cow "<<i<<" To position "<<map[i][POS_X]<<"-"<<map[i][POS_Y]<<"\n";
+		// }
 	}
 	for (size_t i = 0; i < n; i++)
 	{	
@@ -112,9 +130,6 @@ void solve(){
 			cout<<map[i][GRASS_EATEN]<<"\n";
 		}
 	}
-	
-	
-	
 }
 
 int main(){
