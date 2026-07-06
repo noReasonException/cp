@@ -55,6 +55,7 @@ template <typename container> void debug(container& genericSequence,string id="N
 */
 void solve(){
 	int n,x,y;
+	int lx=INF_INT,ly=INF_INT,hx=-1,hy=-1;
 	string o;
 	vector<array<int,5>> map;
 	std::set<pair<int,int>> rutted_blocks;
@@ -64,6 +65,10 @@ void solve(){
 		cin>>o>>x>>y;
 		//N,E | x | y | locked or not locked | GRASS EATEN
 		map.push_back({o[0],x,y,false,1});
+		if(x<lx)lx=x;
+		if(x>hx)hx=x;
+		if(y<ly)ly=y;
+		if(y>hy)hy=y;
 	}
 	// for (size_t i = 0; i < n; i++)
 	// {
@@ -114,7 +119,17 @@ void solve(){
 			}
 			rutted_blocks.insert({map[i][POS_X],map[i][POS_Y]});
 		}
-		
+		//to detect infinities
+		for (size_t i = 0; i < n ; i++)
+		{
+			bool cond = lx>map[i][POS_X] || hx<map[i][POS_X] || ly>map[i][POS_Y] || hy<map[i][POS_Y];
+			if(map[i][IS_LOCKED])continue;
+			if(cond){
+				map[i][IS_LOCKED]=true;
+				map[i][GRASS_EATEN]=-1;
+			}
+		}
+
 		//for debug
 		// for (size_t i = 0; i < n; i++)
 		// {	
@@ -123,7 +138,7 @@ void solve(){
 	}
 	for (size_t i = 0; i < n; i++)
 	{	
-		if(!map[i][IS_LOCKED]){
+		if(map[i][GRASS_EATEN]==-1){
 			cout<<"Infinity\n";
 		}
 		else{
