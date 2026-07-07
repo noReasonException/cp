@@ -54,11 +54,11 @@ template <typename container> void debug(container& genericSequence,string id="N
     
 */
 void solve(){
-	int n,x,y;
-	int lx=INF_INT,ly=INF_INT,hx=-1,hy=-1;
+	ll n,x,y;
+	ll lx=pow(10,9),ly=pow(10,9),hx=-1,hy=-1;
 	string o;
-	vector<array<int,5>> map;
-	std::set<pair<int,int>> rutted_blocks;
+	vector<array<ll,5>> map;
+	std::set<pair<ll,ll>> rutted_blocks;
 	cin>>n;
 	for (size_t i = 0; i < n; i++)
 	{
@@ -74,8 +74,8 @@ void solve(){
 	// {
 	// 	cout<<(char)map[i][0]<<"\t"<<map[i][1]<<"\t"<<map[i][2]<<"\n";
 	// }
-	int hours=0;
-	int locked_cows=0;
+	ll hours=0;
+	ll locked_cows=0;
 	bool terminate=false;
 	while(hours<200000){
 		if(locked_cows==n){
@@ -122,9 +122,13 @@ void solve(){
 		//to detect infinities
 		for (size_t i = 0; i < n ; i++)
 		{
-			bool cond = lx>map[i][POS_X] || hx<map[i][POS_X] || ly>map[i][POS_Y] || hy<map[i][POS_Y];
 			if(map[i][IS_LOCKED])continue;
-			if(cond){
+			// bool out_of_initial_box = lx>map[i][POS_X] || hx<map[i][POS_X] || ly>map[i][POS_Y] || hy<map[i][POS_Y];
+			// bool out_of_initial_box2 = (hx<map[i][POS_X] && map[i][ORIENTATION]=='E') || (hy<map[i][POS_Y] && map[i][ORIENTATION]=='N');
+			bool out_of_initial_box3 = hx<map[i][POS_X] || hy<map[i][POS_Y];
+
+			
+			if(out_of_initial_box3){
 				map[i][IS_LOCKED]=true;
 				map[i][GRASS_EATEN]=-1;
 			}
