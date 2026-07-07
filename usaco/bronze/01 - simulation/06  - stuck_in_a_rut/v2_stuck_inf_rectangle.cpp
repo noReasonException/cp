@@ -54,13 +54,11 @@ template <typename container> void debug(container& genericSequence,string id="N
     
 */
 void solve(){
-	/*
-		Real infinity detection with the rectangle criterion
-		Early collision detection to avoid TLE for large n
-	*/
+	/**
+	 * Real infinity detection with the rectangle criterion
+	 */
 	ll n,x,y;
 	ll lx=pow(10,9),ly=pow(10,9),hx=-1,hy=-1;
-	ll len_x,len_y;
 	string o;
 	vector<array<ll,5>> map;
 	std::set<pair<ll,ll>> rutted_blocks;
@@ -80,27 +78,6 @@ void solve(){
 	ll hours=0;
 	ll locked_cows=0;
 	bool terminate=false;
-
-	// for (size_t a = 0; a < n; a++)
-	// {
-	// 	for (size_t b = 0; b < n; b++)
-	// 	{
-	// 		if(a==b)continue;
-	// 		if(map[a][ORIENTATION]==map[b][ORIENTATION]) continue;
-	// 		len_x=(map[b][POS_X]-map[a][POS_X]);
-	// 		len_y=(map[a][POS_Y]-map[b][POS_Y]);
-	// 		if(map[a][ORIENTATION]=='E'&&len_x>0&&len_y>0&& len_x>len_y){
-	// 			map[a][IS_LOCKED]=true;
-	// 			map[a][GRASS_EATEN]=len_x;
-	// 		}
-	// 		if(map[a][ORIENTATION]=='N'&&len_x>0&&len_y>0&& len_x<len_y){
-	// 			map[b][IS_LOCKED]=true;
-	// 			map[b][GRASS_EATEN]=len_y;
-	// 		}
-			
-	// 	}
-	// }
-	
 
 	while(hours<200000){
 		if(locked_cows==n){
