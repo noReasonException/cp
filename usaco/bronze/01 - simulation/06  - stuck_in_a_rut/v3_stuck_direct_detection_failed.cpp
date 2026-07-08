@@ -54,11 +54,8 @@ template <typename container> void debug(container& genericSequence,string id="N
     
 */
 void solve(){
-	/**
-	 * Fake infinity detection. Only exact simulation
-	 * 
-	 */
 	ll n,x,y;
+	ll len_x,len_y;
 	string o;
 	vector<array<ll,5>> map;
 	std::set<pair<ll,ll>> rutted_blocks;
@@ -69,47 +66,47 @@ void solve(){
 		//N,E | x | y | locked or not locked | GRASS EATEN
 		map.push_back({o[0],x,y,false,1});
 	}
+	/**
+	 *                                                    
+                                               ▲   
+             .           ──▲────       ────────┼─► 
+             .             │                   │   
+             │             │                   │   
+             │             │                   │   
+   ─────────►│             │                   │   
+   Long E - Short N   Short E - Long N    Equal    
+	 */
 
-
-	ll hours=0;
-	ll locked_cows=0;
-	bool terminate=false;
-
-	while(hours<200000){
-		if(locked_cows==n){
-			break;
-		}
-		locked_cows=0;
-		hours+=1;
-		//detect-collisions real-time
-		for (size_t i = 0; i < n; i++)
+	
+	
+	for (size_t a = 0; a < n; a++)
+	{
+		for (size_t b = 0; b < n; b++)
 		{
-			if(map[i][IS_LOCKED]){
-				locked_cows+=1;
-				continue;
+			if(a==b)continue;
+			if(map[a][ORIENTATION]==map[b][ORIENTATION]) continue;
+			len_x=(map[b][POS_X]-map[a][POS_X]);
+			len_y=(map[a][POS_Y]-map[b][POS_Y]);
+			cout<<(char)(map[a][ORIENTATION])<<"\t"<<len_x<<"\t"<<len_y<<"\n";
+			//SELN
+			if(map[a][ORIENTATION]=='N'&&len_x>0&&len_y>0&&len_x<len_y){
+				map[a][IS_LOCKED]=true;
+				map[a][GRASS_EATEN]=len_y;
+				// cout<<"yes 1\n";
 			}
-			if(
-				(rutted_blocks.find({map[i][POS_X]+1,map[i][POS_Y]})!=rutted_blocks.end() && map[i][ORIENTATION]=='E') || 
-				(rutted_blocks.find({map[i][POS_X],map[i][POS_Y]+1})!=rutted_blocks.end() && map[i][ORIENTATION]=='N')
-			)map[i][IS_LOCKED]=true;
-			else map[i][GRASS_EATEN]+=1;
-			
-		}
-		//update positions
-		for (size_t i = 0; i < n ; i++)
-		{
-			if(map[i][IS_LOCKED])continue;
-
-			if(map[i][ORIENTATION]=='E'){
-				map[i][POS_X]+=1;
+			//LESN
+			else if(map[a][ORIENTATION]=='E'&&len_x>0&&len_y>0&& len_x>len_y){
+				map[a][IS_LOCKED]=true;
+				map[a][GRASS_EATEN]=len_x;
+				// cout<<"yes 1\n";
 			}
 			else{
-				map[i][POS_Y]+=1;
+				// cout<<"no\n";
 			}
-			rutted_blocks.insert({map[i][POS_X],map[i][POS_Y]});
 		}
 	}
 
+	cout<<"\n";
 	//results
 	for (size_t i = 0; i < n; i++)
 	{	

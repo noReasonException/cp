@@ -1,0 +1,15 @@
+2
+E 1 5
+N 5 4
+
+                   
+                   
+            .      
+            .      
+            │      
+            │      
+  ─────────►│      
+  Long E - Short N 
+
+E should eat 4      grass
+N should eat inf    grass
