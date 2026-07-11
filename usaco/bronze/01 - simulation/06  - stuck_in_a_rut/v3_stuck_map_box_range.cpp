@@ -70,7 +70,11 @@ bool original(array<ll,6> mapa, array<ll,6> mapb)
 
 void solve(){
 	/**
-	 * delete rutted blocks to reduce memory usage
+	 * 	Simple simulation
+	 * 	early inf if gets out of initial box
+	 * 	deletes rutted blocks to conserve memory
+	 * 	7/10, 60% less memory
+	 *  3/10 now are tle and not out of memory
 	 */
 	ll n,x,y;
 	ll lx=pow(10,9),ly=pow(10,9),hx=-1,hy=-1;

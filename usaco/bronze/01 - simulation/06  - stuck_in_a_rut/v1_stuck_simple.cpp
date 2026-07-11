@@ -55,7 +55,8 @@ template <typename container> void debug(container& genericSequence,string id="N
 */
 void solve(){
 	/**
-	 * Worst so far
+	 *  Simple simulation, inf if does not block after x amount of steps
+	 * 	7/10
 	 */
 	ll n,x,y;
 	ll lx=pow(10,9),ly=pow(10,9),hx=-1,hy=-1;

@@ -55,7 +55,8 @@ template <typename container> void debug(container& genericSequence,string id="N
 */
 void solve(){
 	/**
-	 * 	box to detect infinities early
+	 * 	Simple simulation, early inf if gets out of initial box
+	 * 	7/10, 60% less memory
 	 */
 	ll n,x,y;
 	ll lx=pow(10,9),ly=pow(10,9),hx=-1,hy=-1;
