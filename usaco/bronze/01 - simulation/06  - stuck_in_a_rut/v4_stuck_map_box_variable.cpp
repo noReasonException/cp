@@ -55,10 +55,11 @@ template <typename container> void debug(container& genericSequence,string id="N
 */
 void solve(){
 	/**
-	 * Real infinity detection with the rectangle criterion
+	 * 	box to detect infinities early
 	 */
 	ll n,x,y;
 	ll lx=pow(10,9),ly=pow(10,9),hx=-1,hy=-1;
+	ll chx=-1,chy=-1;
 	string o;
 	vector<array<ll,5>> map;
 	std::set<pair<ll,ll>> rutted_blocks;
@@ -73,65 +74,69 @@ void solve(){
 		if(y<ly)ly=y;
 		if(y>hy)hy=y;
 	}
-
-
-	ll hours=0;
-	ll locked_cows=0;
-	bool terminate=false;
-
-	while(hours<200000){
-		if(locked_cows==n){
-			break;
-		}
-		locked_cows=0;
+	int hours=0;
+	int cows_locked=0;
+	while(hours<100000){
 		hours+=1;
-		//detect-collisions real-time
+		cows_locked=0;
+		//detect collisions
+
+		chy=-1;
+		chx=-1;
 		for (size_t i = 0; i < n; i++)
 		{
-			if(map[i][IS_LOCKED]){
-				locked_cows+=1;
+			if(map[i][GRASS_EATEN]==-1&&map[i][IS_LOCKED])continue;
+			if(map[i][POS_X]>chx)chx=map[i][POS_X];
+			if(map[i][POS_Y]>chy)chy=map[i][POS_Y];
+		}
+		if(chy<hy)hy=chy;
+		if(chx<hx)hx=chx;
+
+
+		
+
+
+
+		for (size_t i = 0; i < n; i++)
+		{
+			if(map[i][IS_LOCKED]) {
+				cows_locked+=1;
 				continue;
 			}
-			if(
-				(rutted_blocks.find({map[i][POS_X]+1,map[i][POS_Y]})!=rutted_blocks.end() && map[i][ORIENTATION]=='E') || 
-				(rutted_blocks.find({map[i][POS_X],map[i][POS_Y]+1})!=rutted_blocks.end() && map[i][ORIENTATION]=='N')
-			)map[i][IS_LOCKED]=true;
-			else map[i][GRASS_EATEN]+=1;
+			if(cows_locked==n) break;
+			if(map[i][ORIENTATION]=='E' && rutted_blocks.find({map[i][POS_X]+1,map[i][POS_Y]})!=rutted_blocks.end())
+				map[i][IS_LOCKED]=1;
 			
+			else if(map[i][ORIENTATION]=='N' && rutted_blocks.find({map[i][POS_X],map[i][POS_Y]+1})!=rutted_blocks.end())
+				map[i][IS_LOCKED]=1;
+			else 
+				map[i][GRASS_EATEN]+=1;
 		}
-		//update positions
-		for (size_t i = 0; i < n ; i++)
+		if(cows_locked==n) break;
+		for (size_t i = 0; i < n; i++)
 		{
-			if(map[i][IS_LOCKED])continue;
-
-			if(map[i][ORIENTATION]=='E'){
-				map[i][POS_X]+=1;
-			}
-			else{
-				map[i][POS_Y]+=1;
-			}
+			if(map[i][IS_LOCKED]) continue;
+			if(map[i][ORIENTATION]=='E') map[i][POS_X]+=1;
+			else if(map[i][ORIENTATION]=='N') map[i][POS_Y]+=1;
 			rutted_blocks.insert({map[i][POS_X],map[i][POS_Y]});
 		}
-		//infinities
+		
 		for (size_t i = 0; i < n ; i++)
 		{
 			if(map[i][IS_LOCKED])continue;
 			// bool out_of_initial_box = lx>map[i][POS_X] || hx<map[i][POS_X] || ly>map[i][POS_Y] || hy<map[i][POS_Y];
 			// bool out_of_initial_box2 = (hx<map[i][POS_X] && map[i][ORIENTATION]=='E') || (hy<map[i][POS_Y] && map[i][ORIENTATION]=='N');
 			bool out_of_initial_box3 = hx<map[i][POS_X] || hy<map[i][POS_Y];
-
-			
 			if(out_of_initial_box3){
 				map[i][IS_LOCKED]=true;
 				map[i][GRASS_EATEN]=-1;
 			}
 		}
 	}
-
 	//results
 	for (size_t i = 0; i < n; i++)
 	{	
-		if(map[i][GRASS_EATEN]==-1){
+		if(map[i][GRASS_EATEN]==-1||!map[i][IS_LOCKED]){
 			cout<<"Infinity\n";
 		}
 		else{
