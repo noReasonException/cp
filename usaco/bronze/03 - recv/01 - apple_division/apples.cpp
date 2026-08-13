@@ -49,13 +49,9 @@ template <typename container> void debug(container& genericSequence,string id="N
     
 */
 vector<vector<ll>> apple_pics;
-vector<set<ll>> apple_pics_set;
 void combinations(vector<ll>&all,ll k,ll depth,vector<ll>&arr){
 	if(arr.size()==k){
-		set<ll> se;
-		se.insert(arr.begin(),arr.end());
 		apple_pics.push_back(arr);
-		apple_pics_set.push_back(se);
 	}
 	else{
 		for (ll i = depth; i < all.size(); i++)
@@ -80,37 +76,37 @@ void solve(){
 	}
 	vector<ll>arr;
 	//load pics array
-	for (ll i = 0; i < n; i++)
+	for (ll i = 1; i <= n; i++)
 	{
 		combinations(apples,i,0,arr);
 	}
 
-	// for(auto e:apple_pics){
-	// 	for(auto u:e){
-	// 		cout<<u<<"-";
-	// 	}
-	// 	cout<<"\n";
-	// }
-
-	//for every pick
-	for (ll i = 0; i < apple_pics.size(); i++){
+	for (size_t i = 0; i < apple_pics.size(); i++)
+	{
+		for (size_t j = 0; j < apple_pics[i].size(); j++)
+		{
+			cout<<apple_pics[i][j]<<",";
+		}
+		cout<<"\n";
+		
+	}
+	
+	for(auto first_basket:apple_pics){
 		//weight of first basket = each
 		//weight of second basket, whomever dont exist in the first basket
 		vector<ll> second_basket;
 		
+		//εδω ειναι το λαθος, εχει duplicates!
 		for(auto each_element:apples){
-			// if(std::find(apple_pics[i].begin(),apple_pics[i].end(),each_element)==apple_pics[i].end()){
-			// 	second_basket.push_back(each_element);	
-			// }
-			if(apple_pics_set[i].find(each_element)==apple_pics_set[i].end()){
+			if(std::find(first_basket.begin(),first_basket.end(),each_element)==first_basket.end()){
 				second_basket.push_back(each_element);	
 			}
 		}
 		//now we have 2 baskets, lets find their difference
 		ll sum1=0, sum2=0;
-		for (ll j = 0; j < apple_pics[i].size(); j++)
+		for (ll i = 0; i < first_basket.size(); i++)
 		{
-			sum1+=apple_pics[i][j];
+			sum1+=first_basket[i];
 		}
 		for (ll i = 0; i < second_basket.size(); i++)
 		{
@@ -121,34 +117,9 @@ void solve(){
 
 	cout<<min_diff<<"\n";
 	
-	
 }
 
 	
-// 	for(auto first_basket:apple_pics){
-// 		//weight of first basket = each
-// 		//weight of second basket, whomever dont exist in the first basket
-// 		vector<ll> second_basket;
-		
-// 		for(auto each_element:apples){
-// 			if(std::find(first_basket.begin(),first_basket.end(),each_element)==first_basket.end()){
-// 				second_basket.push_back(each_element);	
-// 			}
-// 		}
-// 		//now we have 2 baskets, lets find their difference
-// 		ll sum1=0, sum2=0;
-// 		for (ll i = 0; i < first_basket.size(); i++)
-// 		{
-// 			sum1+=first_basket[i];
-// 		}
-// 		for (ll i = 0; i < second_basket.size(); i++)
-// 		{
-// 			sum2+=second_basket[i];
-// 		}
-// 		if(abs(sum1-sum2)<min_diff)min_diff=abs(sum1-sum2);
-// 	}
-
-// 	cout<<min_diff<<"\n";
 	
 	
 // }
