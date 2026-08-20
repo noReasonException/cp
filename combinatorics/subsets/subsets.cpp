@@ -2,7 +2,6 @@
 #include <vector>
 #include <set>
 #include <math.h>
-#include <algorithm>
 using namespace std;
 #define ll 		long long
 #define ull 	unsigned long long
@@ -48,37 +47,25 @@ template <typename container> void debug(container& genericSequence,string id="N
     * long long instead of int
     
 */
-void print_instance(vector<int> instance){
-	for(auto each:instance){
-		cout<<each<<",";
+/**
+ * Given an integer 1 <= n <= 10, write a recursive algorithm that prints all the subsets of the set {1,2,3,...,n}.
+
+ */
+void print_instance(vector<int> used){
+	for(auto a:used){
+		cout<<a<<",";
 	}
 	cout<<"\n";
 }
-void combinations(vector<int>&all, int r,ll depth, vector<int>&used){
-	if(used.size()==r){
-		print_instance(used);
-	}
-	else{
-		for (ll i = depth; i < all.size(); i++)
-		{
-			used.push_back(all[i]);
-			combinations(all,r,i+1,used);
-			used.pop_back();
-		}
-	}
+void subsets(){
+	//use the binary representation of 
 }
-
 
 int main(){
 	ios::sync_with_stdio(false);
 	cin.tie(0);
-	//freopen("input.in", "r", stdin);
-	//freopen("output.out", "w", stdout);
+	//freopen("input.txt", "r", stdin);
+	//freopen("output.txt", "w", stdout);
 
-	vector<int> e={1,2,3,4};
-	int r = 2;
-	vector<int>used = {};
-	combinations(e,r,0,used);
-	
 	return 0;
 }
