@@ -45,49 +45,45 @@ template <typename container> void debug(container& genericSequence,string id="N
     * simple is better than complex
     * n % mod = (n % mod + mod) % mod;
     * long long instead of int
-    
 
-
-You are given an integer array nums consisting of n elements, and an integer k.
-
-Find a contiguous subarray whose length is equal to k that has the maximum average 
-value and return this value. Any answer with a calculation error less than 10-5 will be accepted.
-
+Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
 Example 1:
-Input: nums = [1,12,-5,-6,50,3], k = 4
-Output: 12.75000
-Explanation: Maximum average is (12 - 5 - 6 + 50) / 4 = 51 / 4 = 12.75
+
+Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+Output: 6
+Explanation: [1,1,1,0,0,1,1,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
 
 Example 2:
-Input: nums = [5], k = 1
-Output: 5.00000
+
+Input: nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3
+Output: 10
+Explanation: [0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
 
 Constraints:
+    1 <= nums.length <= 105
+    nums[i] is either 0 or 1.
+    0 <= k <= nums.length
 
-    n == nums.length
-    1 <= k <= n <= 105
-    -104 <= nums[i] <= 104
+
 */
-void solve(std::vector<int> nums,int k){
-	double curr_sum=0;
-	int i=0;
-	while(i<k){
-		curr_sum+=nums[i];
-		i++;
-	}
-	int low=0;
-	double max_avg=curr_sum/k;
-	//initial fixed, now for the rest of em
-	for (size_t high = i; high < nums.size(); high++)
-	{	
-		curr_sum+=nums[high];
-		curr_sum-=nums[low];
-		if(curr_sum/k>max_avg){
-			max_avg=curr_sum/k;
+void longest_ones(vector<int>nums){
+	int low=0,high=0,sizemax=-1;
+	while(low<nums.size()&&nums[low]==0)low+=1;
+	high=low;
+	while(high<nums.size()){
+		if(nums[high+1]==1)high++;
+		else {
+			sizemax=max(sizemax,high-low);
+			while(low<nums.size()&&nums[low]==0){
+				low+=1;
+			}
+			high=low;
 		}
-		low+=1;
 	}
-	cout<<max_avg;
+	
+	
 }
 
 int main(){
@@ -95,5 +91,7 @@ int main(){
 	cin.tie(0);
 	//freopen("input.in", "r", stdin);
 	//freopen("output.out", "w", stdout);
-	solve({1,12,-5,-6,50,3},4);
+
+	longest_ones({1,0,0,0,0,0,1,1,1,1});
+	return 0;
 }
