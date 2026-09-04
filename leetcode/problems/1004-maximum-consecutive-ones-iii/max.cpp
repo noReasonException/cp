@@ -46,33 +46,34 @@ template <typename container> void debug(container& genericSequence,string id="N
     * n % mod = (n % mod + mod) % mod;
     * long long instead of int
 
-Given a binary array nums, return the maximum number of consecutive 1's in the array.
-
- 
-
+Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
 Example 1:
 
-Input: nums = [1,1,0,1,1,1]
-Output: 3
-Explanation: The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.
+Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+Output: 6
+Explanation: [1,1,1,0,0,1,1,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
 
 Example 2:
 
-Input: nums = [1,0,1,1,0,1]
-Output: 2
-
- 
+Input: nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3
+Output: 10
+Explanation: [0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
 
 Constraints:
-
     1 <= nums.length <= 105
     nums[i] is either 0 or 1.
+    0 <= k <= nums.length
+
 
 */
-int longest_ones(vector<int>nums){
+int longest_ones(vector<int>nums,int k){
+	if(k==0){
         int low=0,high=0,sizemax=0;
         while(low<nums.size()&&nums[low]==0)low+=1;
         high=low;
+		
         while(high<nums.size()){
             if(high+1==nums.size()){
                 sizemax=max(sizemax,high-low+1);
@@ -89,9 +90,70 @@ int longest_ones(vector<int>nums){
             }
         }
         return sizemax;
-    
+	}
+    int low=0,high=0,zeroesWithin=0;
+	int sizemax=-1;
+	//initialization state
+	while(low+1<nums.size()&&nums[low]==0)low++;
+	high=low;
+    if(high==nums.size()-1&&nums[high]==0)return k;
+	while(zeroesWithin<k&&low-1>=0&&nums[low-1]==0){
+		zeroesWithin++;
+		low--;
+	}
+	// if(nums[low]==0)zeroesWithin=1;
+
+
+	cout<<"low\thigh\tmove\n";
+	while(low<=high&&high<nums.size()){
+		cout<<low<<"\t"<<high<<"";
+		if(high+1<nums.size()){
+
+			if(nums[high+1]==1){
+				cout<<"\t1\n";
+				high++;
+			}
+
+			else if(nums[high+1]==0&&zeroesWithin<k){
+				cout<<"\t2\n";
+				high++;
+				zeroesWithin++;
+			}
+			else if(nums[high+1]==0&&zeroesWithin>=k){
+				//we cant move high at all, can we move low?
+				if(nums[low]==0&&nums[low+1]==1){
+					cout<<"\t3\n";
+					low++;
+					zeroesWithin--;
+				}
+				else if(nums[low]==0&&nums[low+1]==0){
+					cout<<"\t4\n";
+					low++;
+					zeroesWithin--;
+				}
+				else if (nums[low]==1&&nums[low+1]==0){
+					cout<<"\t5\n";
+					low++;
+				}
+				else if (nums[low]==1&&nums[low+1]==1){
+					cout<<"\t6\n";
+					low++;
+				}
+				else cout<<"\tImpossible\n";
+
+			}
+			
+		}
+		else{
+			sizemax=max(sizemax,high-low+1);
+			cout<<"\tbreak\n";
+			break;
+		}
+		sizemax=max(sizemax,high-low+1);
+		
 	
-	
+	}
+	return sizemax;
 }
 
 int main(){
@@ -99,7 +161,6 @@ int main(){
 	cin.tie(0);
 	//freopen("input.in", "r", stdin);
 	//freopen("output.out", "w", stdout);
-
-	cout<<longest_ones({1,1,0,1,1,1});
 	return 0;
 }
+
